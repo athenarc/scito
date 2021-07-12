@@ -1,0 +1,14 @@
+.topic-tooltip path {
+    fill: white;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.topic-tooltip text {
+    dominant-baseline: hanging;
+    fill: black;
+}
+
+.topic-tooltip text .heavy {
+    font-weight: bold;
+}
