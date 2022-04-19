@@ -68,7 +68,7 @@ class Command(BaseCommand):
                             topic_stats_obj.number_of_relevant_texts = input_dict[doc_model_name][topic_str][
                                 'documents_clustered']
                             topic_stats_obj.relevant_texts_avg_pagerank_score = input_dict[doc_model_name][topic_str][
-                                                                                    'total_relevant_texts_avg_pagerank_score'] / \
+                                                                                    'total_score'] / \
                                                                                 input_dict[doc_model_name][topic_str][
                                                                                     'documents_scored']
                             topic_stats_obj.save()
@@ -77,7 +77,7 @@ class Command(BaseCommand):
                             topic_statistics_objects.append(TopicStatistics(
                                 topic=topic_obj,
                                 number_of_relevant_texts=input_dict[doc_model_name][topic_str]['documents_clustered'],
-                                relevant_texts_avg_pagerank_score=input_dict[doc_model_name][topic_str]['total_relevant_texts_avg_pagerank_score'] /
+                                relevant_texts_avg_pagerank_score=input_dict[doc_model_name][topic_str]['total_score'] /
                                                                   input_dict[doc_model_name][topic_str][
                                                                       'documents_scored']
                             ))

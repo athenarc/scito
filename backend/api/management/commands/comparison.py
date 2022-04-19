@@ -16,8 +16,6 @@ class Command(BaseCommand):
         register_parser.add_argument('path_to_npy', help='Path to similarity matrix')
         register_parser.add_argument('old_model_name', help='Name of the older model')
         register_parser.add_argument('new_model_name', help='Name of the newer model')
-        register_parser.add_argument('-n', '--name', help='A unique slug name for the LDA model to be registered. Use '
-                                                          '"list" subcommand to determine existing models.')
 
         list_parser = subparsers.add_parser('list', description='List cross-model similarities')
 
@@ -36,7 +34,6 @@ class Command(BaseCommand):
             self.drop(**options)
 
     def register(self, **kwargs):
-        print(kwargs)
         similarity_matrix = np.load(kwargs['path_to_npy'])
 
         model0 = TopicModel.objects.get(name=kwargs['old_model_name'])

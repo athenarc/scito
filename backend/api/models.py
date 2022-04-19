@@ -1,3 +1,4 @@
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.core import validators
 from django.utils.text import slugify
@@ -6,7 +7,9 @@ from django.utils.text import slugify
 class TopicModel(models.Model):
     title = models.CharField(
         max_length=64,
-        help_text='A human readable title of the model which will be used to present the model in the interface.'
+        help_text='A human readable title of the model which will be used to present the model in the interface.',
+        validators=[MinLengthValidator(1)],
+        default=None
     )
     start_year = models.PositiveSmallIntegerField(
         help_text='Starting time period of generation of training texts',
@@ -20,14 +23,18 @@ class TopicModel(models.Model):
     )
     description = models.TextField(
         blank=True,
-        null=True,
         help_text='An optional field which allows the attachment of a text providing more information regarding the '
                   'model.'
     )
 
     def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = slugify(self.title)
+        if self.title is not None:
+            self.title = str.strip(self.title)
+            if len(self.title) > 0:
+                if not self.name:
+                    self.name = slugify(self.title)
+            else:
+                self.title = None
         super(TopicModel, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -64,7 +71,6 @@ class Topic(models.Model):
         max_length=64,
         help_text='A textual representation of the topic\'s semantics'
     )
-    terms = models.ManyToManyField(Term, through='TopicTermAssignment', blank=True)
 
     def __str__(self):
         return f'Topic {(self.title or self.index)} of model "{self.topic_model}"'
