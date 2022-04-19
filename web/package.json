@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@deligianp/evolution-graph": "0.0.3",
+    "@deligianp/evolution-graph": "^0.0.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
@@ -16,7 +16,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.1",
     "reactstrap": "^8.9.0",
     "redux": "^4.1.0",
     "web-vitals": "^1.1.2"
