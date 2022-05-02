@@ -1,12 +1,12 @@
-import {createStore, combineReducers} from 'redux';
+import {combineReducers} from 'redux';
 
 // Import reducers here
-import topicEvolutionReducer from '../topic-evolution-visualization/redux';
+import topicEvolutionVisualizationReducer from '../topic-evolution-visualization/redux';
 
 const rootReducer = combineReducers(
     {
         // Register reducers here
-        topicEvolution: topicEvolutionReducer
+        topicEvolutionVisualization: topicEvolutionVisualizationReducer
     }
-)
-export default createStore(rootReducer);
+);
+export default rootReducer;
