@@ -4,7 +4,9 @@ import {FULFILLED, PENDING} from "../../utils/async-action-types";
 import produce from "immer";
 
 const ACTION_TYPES = {
+    SET_TERMS_REQUESTED: 'SET_TERMS_REQUESTED',
     GET_DATA: 'GET_DATA',
+    GET_DETAILS: 'GET_DETAILS',
     ENABLE_TOOLTIP: 'ENABLE_TOOLTIP',
     DISABLE_TOOLTIP: 'DISABLE_TOOLTIP',
     DRAW: 'DRAW'
@@ -19,6 +21,16 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case ACTION_TYPES.SET_TERMS_REQUESTED:
+            return produce(state, draft => {
+                const topic = draft.nodes[`${action.payload.model}-${action.payload.topic}`];
+                topic.terms = [];
+            });
+        case FULFILLED(ACTION_TYPES.GET_DETAILS):
+            return produce(state, draft => {
+                const topic = draft.nodes[`${action.payload.model}-${action.payload.topic}`];
+                topic.terms = action.payload.terms;
+            });
         case PENDING(ACTION_TYPES.GET_DATA):
             return produce(initialState, draft => {
                 draft.loading = true;
@@ -82,6 +94,34 @@ export const getData = (width, height) => ({
             };
         })
 });
+
+export const setTermsRequested = node => ({
+    type: ACTION_TYPES.SET_TERMS_REQUESTED,
+    payload: node
+});
+
+export const getDetails = node => {
+    return dispatch => {
+        dispatch(setTermsRequested(node));
+        dispatch(requestDetails(node));
+    };
+};
+export const requestDetails = node => {
+    const model = node.model;
+    const topic = node.topic;
+    return {
+        type: ACTION_TYPES.GET_DETAILS,
+        payload: api.get(`models/${model}/topics/${topic}/`)
+            .then(response => {
+                const terms = response.data.terms.map(term => ({text: term.string, value: term.probability}));
+                return {
+                    model,
+                    topic,
+                    terms
+                };
+            })
+    };
+};
 
 export const enableTooltip = nodeName => (
     {

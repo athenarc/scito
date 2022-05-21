@@ -1,5 +1,5 @@
 import {Provider} from "react-redux";
-import './App.css'
+import './App.css';
 import TopicEvolutionVisualization from "./topic-evolution-visualization/TopicEvolutionVisualization";
 import {
     Button,
@@ -17,6 +17,7 @@ import {
     Row
 } from 'reactstrap';
 import {store} from "./config/store";
+import TopicEvolutionVisualizationLegend from "./topic-evolution-visualization/TopicEvolutionVisualizationLegend";
 
 const App = () => {
     return (
@@ -26,8 +27,7 @@ const App = () => {
                     <Collapse isOpen={true} navbar>
                         <Nav className="mr-auto" navbar>
                             <NavItem>
-                                <NavLink className="text-white" activeClassName="text-danger"
-                                         href="/components/">Home</NavLink>
+                                <NavLink className="text-white active" href="/components/">Home</NavLink>
                             </NavItem>
                         </Nav>
                     </Collapse>
@@ -56,9 +56,10 @@ const App = () => {
                         </Col>
                     </Row>
                 </Jumbotron>
+                <TopicEvolutionVisualizationLegend/>
                 <Row className={'justify-content-center'}>
-                    <Col xs={12}>
-                        <TopicEvolutionVisualization width={'100%'} height={800}/>
+                    <Col xs={12} className={'border border-secondary overflow-auto'}>
+                        <TopicEvolutionVisualization width={1200} height={800}/>
                     </Col>
                 </Row>
             </Container>

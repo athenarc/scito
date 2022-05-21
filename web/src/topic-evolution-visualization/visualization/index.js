@@ -11,7 +11,8 @@ export const normalizeNodeScores = nodes => {
             return {
                 ...topicNode,
                 layer,
-                proportional_avg_pagerank_score
+                proportional_avg_pagerank_score,
+                terms: null,
             }
         }
     );
@@ -33,7 +34,9 @@ export const draw = (nodes, links, width, height) => {
             rendering: {
                 linkType: 'c_bezier',
                 nodeMargin: 2,
-                layerMargin: 200
+                layerMargin: 200,
+                paddingY: 45,
+                paddingX: 20
             },
             data: {
                 weighted: true,

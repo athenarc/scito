@@ -1,14 +1,5 @@
-.topic-tooltip path {
-    fill: white;
-    stroke: black;
-    stroke-width: 1px;
-}
-
-.topic-tooltip text {
-    dominant-baseline: hanging;
-    fill: black;
-}
-
-.topic-tooltip text .heavy {
-    font-weight: bold;
+.topic-node.active rect{
+    /*border: 1px solid #999;*/
+    stroke-width:1;
+    stroke:rgb(0,0,0)
 }
