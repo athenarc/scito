@@ -1,6 +1,7 @@
 import axios from "axios";
+import config from './local-config.json.template';
 
 export const api = axios.create({
-        baseURL: "http://localhost:8000/api/"
+        baseURL: config.api_url
     }
 )
