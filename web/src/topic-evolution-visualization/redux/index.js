@@ -13,7 +13,8 @@ const ACTION_TYPES = {
 const initialState = {
     loading: false,
     nodes: null,
-    links: null
+    links: null,
+    activeNodesRegistry: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -28,20 +29,39 @@ const reducer = (state = initialState, action) => {
                 nodes,
                 links
             } = draw(action.payload.nodes, action.payload.links, action.payload.width, action.payload.height);
-            return produce(state, draft=>{
-                draft.nodes=nodes;
-                draft.links=links;
-            })
+            return produce(state, draft => {
+                const nodesRegistry = {};
+                const linksRegistry = {};
+                nodes.forEach(node=>{
+                    nodesRegistry[node.name]=node;
+                });
+                draft.nodes =nodesRegistry;
+                // draft.nodes = nodes.reduce((registry, node) => registry[node.name] = node, {});
+                links.forEach(link=>{
+                    linksRegistry[`link-${link.topic0}-${link.topic1}`] = link;
+                });
+                // draft.links = links.reduce((registry, link) => registry[`link-${link.topic0.name}-${link.topic1.name}`] = link, {});
+                draft.links = linksRegistry;
+                draft.activeNodesRegistry = {};
+                draft.loading = false;
+            });
         case ACTION_TYPES.ENABLE_TOOLTIP:
-            return produce(state, draft=> {
-                const targetNode=draft.nodes.find(node=>node.name===action.nodeName)
-                targetNode.active=true
+            return produce(state, draft => {
+                draft.activeNodesRegistry[action.nodeName]=Object.keys(draft.activeNodesRegistry).length;
             });
         case ACTION_TYPES.DISABLE_TOOLTIP:
-            return produce(state, draft=> {
-                const targetNode=draft.nodes.find(node=>node.name===action.nodeName)
-                targetNode.active=false
-            })
+            return produce(state, draft => {
+                if (draft.activeNodesRegistry.hasOwnProperty(action.nodeName)) {
+                    const order = draft.activeNodesRegistry[action.nodeName];
+                    Object.keys(draft.activeNodesRegistry).forEach(nodeName=>{
+                        if (draft.activeNodesRegistry[nodeName]>order) {
+                            draft.activeNodesRegistry[nodeName]-=1;
+                        }
+                    });
+                    delete draft.activeNodesRegistry[action.nodeName];
+                }
+            });
+        case PENDING(ACTION_TYPES.GET_DETAILS):
         default:
             return produce(state, draft => {
             });

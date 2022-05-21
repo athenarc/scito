@@ -41,6 +41,5 @@ export const draw = (nodes, links, width, height) => {
             }
         }
     );
-    const layout = eg.getLayout();
-    return layout;
+    return eg.getLayout();
 }
