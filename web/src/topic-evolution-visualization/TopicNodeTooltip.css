@@ -1,0 +1,17 @@
+.topic-node-tooltip path {
+    fill: rgba(224,224,224,0.9);
+    stroke: rgba(196,196,196,0.9);
+    stroke-width: 1px;
+}
+
+.topic-node-tooltip text .heavy {
+    font-weight: bold;
+}
+
+.topic-node-tooltip .content {
+    display:flex;
+    flex-direction: column;
+    width: inherit;
+    height: inherit;
+    overflow: auto;
+}
