@@ -21,7 +21,7 @@ def topics(request, model, topic=None):
 
         with transaction.atomic():
             try:
-                topic_obj = Topic.objects.get(index=topic, topic_model__name=model)
+                topic_obj = Topic.objects.get(index=int(topic), topic_model__name=model)
             except Topic.DoesNotExist:
                 return Response({'message': f'Topic {topic} does not exist'}, status=404)
             except TopicModel.DoesNotExist:
