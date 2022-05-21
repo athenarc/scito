@@ -14,7 +14,7 @@ class TopicEvolutionVisualization extends React.Component {
         const modelHeadings = {};
         if (this.props.nodes) {
             Object.values(this.props.nodes).forEach(node => {
-                if (!(modgitelHeadings.hasOwnProperty(node.model))) {
+                if (!(modelHeadings.hasOwnProperty(node.model))) {
                     modelHeadings[node.model] = [node.x, 25, node.model_title];
                 }
             });
