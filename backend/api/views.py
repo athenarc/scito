@@ -21,7 +21,7 @@ def topics(request, model, topic=None):
 
         with transaction.atomic():
             try:
-                topic_obj = Topic.objects.get(index=topic, topic_model__name=model)
+                topic_obj = Topic.objects.get(index=int(topic), topic_model__name=model)
             except Topic.DoesNotExist:
                 return Response({'message': f'Topic {topic} does not exist'}, status=404)
             except TopicModel.DoesNotExist:
@@ -70,10 +70,12 @@ def models_similarity_graph(request):
 
     topic_similarities = TopicSimilarity.objects.filter(similarity__gte=MINIMUM_SIMILARITY).values(
         'comparison__model0__name',
+        'comparison__model0__title',
         'topic0__index',
         'topic0__topicstatistics__number_of_relevant_texts',
         'topic0__topicstatistics__relevant_texts_avg_pagerank_score',
         'comparison__model1__name',
+        'comparison__model1__title',
         'topic1__index',
         'topic1__topicstatistics__number_of_relevant_texts',
         'topic1__topicstatistics__relevant_texts_avg_pagerank_score',
@@ -88,6 +90,7 @@ def models_similarity_graph(request):
             referred_topics[referred_topic_designated_name_0] = {
                 'name': referred_topic_designated_name_0,
                 'model': topic_similarity_obj['comparison__model0__name'],
+                'model_title': topic_similarity_obj['comparison__model0__title'],
                 'topic': topic_similarity_obj['topic0__index'],
                 'number_of_relevant_texts': topic_similarity_obj['topic0__topicstatistics__number_of_relevant_texts'],
                 'avg_pagerank_score': topic_similarity_obj[
@@ -99,6 +102,7 @@ def models_similarity_graph(request):
             referred_topics[referred_topic_designated_name_1] = {
                 'name': referred_topic_designated_name_1,
                 'model': topic_similarity_obj['comparison__model1__name'],
+                'model_title': topic_similarity_obj['comparison__model1__title'],
                 'topic': topic_similarity_obj['topic1__index'],
                 'number_of_relevant_texts': topic_similarity_obj['topic1__topicstatistics__number_of_relevant_texts'],
                 'avg_pagerank_score': topic_similarity_obj[

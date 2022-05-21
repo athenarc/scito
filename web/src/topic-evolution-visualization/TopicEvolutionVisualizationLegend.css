@@ -1,0 +1,17 @@
+.legend-arrow {
+    flex: 1 0 10px;
+    display:inline-block;
+    border-bottom: 2px dashed black;
+    position:relative;
+}
+
+.legend-arrow:after {
+    position:absolute;
+    top:-4px;
+    left:100%;
+    content: "";
+    border-left: 5px solid black;
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-right: 5px solid transparent;
+}
