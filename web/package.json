@@ -23,7 +23,7 @@
     "redux": "^4.2.0",
     "redux-promise-middleware": "^6.1.2",
     "redux-thunk": "^2.4.1",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
