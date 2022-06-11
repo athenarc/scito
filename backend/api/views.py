@@ -1,13 +1,10 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+import itertools
 from django.db import transaction
 from django.db.models import Count, F, Value, SmallIntegerField
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from api.models import Topic, TopicTermAssignment, TopicModel, TopicSimilarity, Term
-
-import math
 
 
 @api_view(['GET'])
@@ -143,6 +140,11 @@ def search_terms(request):
             .annotate(result_order=Value(0, output_field=SmallIntegerField()))
         qs1 = Term.objects.filter(string__icontains=token).values(term=F('string')) \
             .annotate(result_order=Value(1, output_field=SmallIntegerField()))
-        qs = qs0.union(qs1).order_by('result_order', 'term')
-        response = [res['term'] for res in qs]
+
+        seen_terms = set()
+        for term_obj in itertools.chain(qs0, qs1):
+            if term_obj['term'] not in seen_terms:
+                seen_terms.add(term_obj['term'])
+                response.append(term_obj['term'])
+
     return Response(response)
