@@ -9,7 +9,7 @@ const dominantColors = [
 
 const paletteRange = 130;
 
-export const palette = new Gradient().setGradient(...dominantColors).setMidpoint(paletteRange);
+export const palette = new Gradient().setColorGradient(...dominantColors).setMidpoint(paletteRange);
 
 export const TOOLTIP_PADDING_Y = 5;
 export const TOOLTIP_PADDING_X = 5;
