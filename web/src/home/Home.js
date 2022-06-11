@@ -1,5 +1,6 @@
 import {Col, Container, Jumbotron, Row} from "reactstrap";
 import TopicEvolutionVisualization from "../topic-evolution-visualization/TopicEvolutionVisualization";
+import TopicFilterer from "./TopicFilterer";
 
 const Home = () => {
 
@@ -11,7 +12,12 @@ const Home = () => {
                 </Col>
             </Row>
         </Jumbotron>
-        <TopicEvolutionVisualization />
+        <Row className={'justify-content-center'}>
+            <Col xs={12} md={8}>
+                <TopicFilterer/>
+            </Col>
+        </Row>
+        <TopicEvolutionVisualization/>
     </Container>;
 }
 

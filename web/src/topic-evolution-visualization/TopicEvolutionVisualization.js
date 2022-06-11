@@ -1,4 +1,4 @@
-import {Button, Col, Input, InputGroup, InputGroupAddon, Row} from "reactstrap";
+import {Col, Row} from "reactstrap";
 import TopicEvolutionVisualizationLegend from "./TopicEvolutionVisualizationLegend";
 import TopicEvolutionVisualizationCanvas from "./TopicEvolutionVisualizationCanvas";
 
@@ -8,16 +8,6 @@ const TopicEvolutionVisualization = () => {
         <Row>
             <Col xs={12} md={8}>
 
-            </Col>
-        </Row>
-        <Row className={'justify-content-center my-2'}>
-            <Col xs={12} md={8}>
-                <InputGroup>
-                    <Input placeholder="Search topic keywords" className={'shadow-none'}/>
-                    <InputGroupAddon addonType="append">
-                        <Button color="dark" className={'shadow-none'}>Search</Button>
-                    </InputGroupAddon>
-                </InputGroup>
             </Col>
         </Row>
         <Row className={'justify-content-center m-4'}>
