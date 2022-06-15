@@ -1,5 +1,10 @@
+.topic-node.filtered rect{
+    stroke-width: 5px;
+    stroke: #17a2b8;
+}
+
 .topic-node.active rect{
     /*border: 1px solid #999;*/
-    stroke-width:1;
-    stroke:rgb(0,0,0)
+    stroke-width:2px !important;
+    stroke:rgb(0,0,0) !important;
 }

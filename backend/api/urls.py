@@ -7,5 +7,6 @@ urlpatterns = [
     path('models/<str:model>/topics/', views.topics, name='list-topics'),
     path('models/<str:model>/', views.models, name='list-model-details'),
     path('models/', views.models, name='list-models'),
-    path('search-topics/', views.search_topics, name='search_topics')
+    path('search-topics/', views.search_topics, name='search_topics'),
+    path('search-terms/', views.search_terms, name='search_terms')
 ]

@@ -1,0 +1,1 @@
+export const topicHash = topic => `${topic.model}-${topic.index}`;

@@ -1,13 +1,10 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+import itertools
 from django.db import transaction
-from django.db.models import Count, F
+from django.db.models import Count, F, Value, SmallIntegerField
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from api.models import Topic, TopicTermAssignment, TopicModel, TopicSimilarity
-
-import math
+from api.models import Topic, TopicTermAssignment, TopicModel, TopicSimilarity, Term
 
 
 @api_view(['GET'])
@@ -123,22 +120,31 @@ def models_similarity_graph(request):
 
 @api_view(['GET'])
 def search_topics(request):
-    search_terms = request.GET.get('query', '').split()
-    related_topic_term_assignments = TopicTermAssignment.objects.filter(
-        term__string__in=search_terms
-    ).values('probability').annotate(model=F('topic__topic_model__name')).annotate(topic=F('topic__index'))
-    related_topics = dict()
-    if related_topic_term_assignments:
-        for tta in related_topic_term_assignments:
-            if tta['topic'] not in related_topics:
-                related_topics[tta['topic']] = list()
-            related_topics[tta['topic']].append(tta['probability'])
-        score_func = math.prod
-        sorted_related_topics = sorted(
-            [
-                {'topic': topic_index, 'score': score_func(related_topics[topic_index])} for topic_index in
-                related_topics
-            ], reverse=True, key=lambda x: x['score']
-        )
-        return Response(sorted_related_topics)
-    return Response([])
+    response = []
+    terms = request.GET.getlist('token', default=None)
+    if terms is not None:
+        qs = Topic.objects.filter(topictermassignment__term__string__in=terms) \
+            .values('index', model=F('topic_model__name')).distinct('index', 'model')
+
+        response = [{'index': res['index'], 'model': res['model']} for res in qs]
+    return Response(response)
+
+
+@api_view(['GET'])
+def search_terms(request):
+    response = []
+    token = request.GET.get('token', None)
+    if token is not None:
+        token = str.strip(token)
+        qs0 = Term.objects.filter(string__istartswith=token).values(term=F('string')) \
+            .annotate(result_order=Value(0, output_field=SmallIntegerField()))
+        qs1 = Term.objects.filter(string__icontains=token).values(term=F('string')) \
+            .annotate(result_order=Value(1, output_field=SmallIntegerField()))
+
+        seen_terms = set()
+        for term_obj in itertools.chain(qs0, qs1):
+            if term_obj['term'] not in seen_terms:
+                seen_terms.add(term_obj['term'])
+                response.append(term_obj['term'])
+
+    return Response(response)

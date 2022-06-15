@@ -1,1 +1,6 @@
-backend/**/management/migrations/**
+backend/*/migrations/**
+backend/**/__pycache__/
+
+web/node_modules/
+
+**/.idea/

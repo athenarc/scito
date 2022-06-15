@@ -38,7 +38,7 @@ const TopicNodeTooltip = props => {
                             ? <div style={{width: '90%', height: '90%'}}>
                                 <ReactWordcloud
                                     options={{
-                                        colors: palette.getArray(),
+                                        colors: palette.getColors(),
                                         deterministic: true,
                                         enableTooltip: true,
                                         fontSizes: [5, 60],

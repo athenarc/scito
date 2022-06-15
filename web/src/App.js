@@ -1,68 +1,41 @@
 import {Provider} from "react-redux";
 import './App.css';
-import TopicEvolutionVisualization from "./topic-evolution-visualization/TopicEvolutionVisualization";
-import {
-    Button,
-    Col,
-    Collapse,
-    Container,
-    Input,
-    InputGroup,
-    InputGroupAddon,
-    Jumbotron,
-    Nav,
-    Navbar,
-    NavItem,
-    NavLink,
-    Row
-} from 'reactstrap';
+import {Collapse, Container, Nav, Navbar, NavbarToggler, NavItem} from 'reactstrap';
 import {store} from "./config/store";
-import TopicEvolutionVisualizationLegend from "./topic-evolution-visualization/TopicEvolutionVisualizationLegend";
+import {NavLink, Redirect, Route, Switch} from "react-router-dom";
+import Home from "./home/Home";
+import About from "./about/About";
+import React, {useState} from "react";
+import Topic from "./topic/Topic";
 
 const App = () => {
+    const [isOpen,setOpen] = useState(false);
+    const toggle = () => setOpen(!isOpen);
     return (
         <Provider store={store}>
-            <Navbar color={'dark'}>
+            <Navbar color={'dark'} dark expand={'md'}>
                 <Container>
-                    <Collapse isOpen={true} navbar>
+                    <NavbarToggler onClick={toggle} />
+                    <Collapse isOpen={isOpen} navbar>
                         <Nav className="mr-auto" navbar>
                             <NavItem>
-                                <NavLink className="text-white active" href="/components/">Home</NavLink>
+                                <NavLink to={'/'} exact={true} className="nav-link">Home</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink to={'about'} exact={true} className="nav-link">About</NavLink>
                             </NavItem>
                         </Nav>
                     </Collapse>
                 </Container>
             </Navbar>
-            <Container>
-                <Jumbotron className={'bg-transparent'}>
-                    <Row className={'justify-content-center m-4'}>
-                        <Col xs={6} md={4}>
-                            <img width={'100%'} height={'auto'} src={process.env.PUBLIC_URL + '/scito2-1.png'}/>
-                        </Col>
-                    </Row>
-                    <Row className={'justify-content-center'}>
-                        <Col xs={12} md={8}>
-                            <InputGroup>
-                                <Input placeholder="Search topic keywords" className={'shadow-none'}/>
-                                <InputGroupAddon addonType="append">
-                                    <Button color="dark" className={'shadow-none'}>Search</Button>
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </Col>
-                    </Row>
-                    <Row className={'justify-content-center m-4'}>
-                        <Col className={'text-scito text-center'} xs={4}>
-                            <h3>SCIentific TOpic trends</h3>
-                        </Col>
-                    </Row>
-                </Jumbotron>
-                <TopicEvolutionVisualizationLegend/>
-                <Row className={'justify-content-center'}>
-                    <Col xs={12} className={'border border-secondary overflow-auto'}>
-                        <TopicEvolutionVisualization width={1200} height={800}/>
-                    </Col>
-                </Row>
-            </Container>
+            <Switch>
+                <Route exact path={'/'} component={Home}/>
+                <Route exact path={'/about'} component={About}/>
+                <Route exact path={'/models/:model/topics/:index'} component={Topic}/>
+                <Route path='*'>
+                    <Redirect to="/" replace={true} />
+                </Route>
+            </Switch>
         </Provider>
     );
 }
