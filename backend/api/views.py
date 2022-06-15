@@ -121,12 +121,12 @@ def models_similarity_graph(request):
 @api_view(['GET'])
 def search_topics(request):
     response = []
-    terms = request.GET.getlist('tokens', default=None)
+    terms = request.GET.getlist('token', default=None)
     if terms is not None:
         qs = Topic.objects.filter(topictermassignment__term__string__in=terms) \
             .values('index', model=F('topic_model__name')).distinct('index', 'model')
 
-        response = [{'topic': res['index'], 'model': res['model']} for res in qs]
+        response = [{'index': res['index'], 'model': res['model']} for res in qs]
     return Response(response)
 
 
