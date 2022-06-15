@@ -12,6 +12,7 @@ import {
     TOOLTIP_PADDING_X, TOOLTIP_PADDING_Y,
     TOOLTIP_WIDTH
 } from "./visualization/constants";
+import {Link} from "react-router-dom";
 
 const TopicNodeTooltip = props => {
     const tooltipAnchorPoint = [props.node.x + props.node.width + 1, props.node.y + Math.floor(props.node.height / 2)];
@@ -27,7 +28,7 @@ const TopicNodeTooltip = props => {
                        width={TOOLTIP_WIDTH - (2 * TOOLTIP_PADDING_X) - TOOLTIP_CONTENT_SCROLLBAR_GUTTER}
                        height={TOOLTIP_HEIGHT - (2 * TOOLTIP_PADDING_Y)}>
             <div className={'container-fluid content'} xmlns="http://www.w3.org/1999/xhtml">
-                <div><h3><strong>{`Topic ${props.node.topic}`}</strong></h3></div>
+                <div><h3><strong><Link to={`models/${props.node.model}/topics/${props.node.topic}`} target="_blank" className={'text-decoration-none text-dark'}>{`Topic ${props.node.topic}`}</Link></strong></h3></div>
                 <div><strong>&bull; Number of publications: </strong>{props.node.number_of_relevant_texts}</div>
                 <div><strong>&bull; Average pagerank score: </strong>{props.node.avg_pagerank_score}</div>
                 <strong>&bull; Top terms:</strong>
