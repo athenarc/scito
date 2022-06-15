@@ -34,7 +34,7 @@ const evaluateFilteredTopicsConjunction = (filters, filterEffects) => {
             filterEffects[filter].forEach(topic => {
                 const currentTopicHash = topicHash(topic);
                 if (base.hasOwnProperty(currentTopicHash)) {
-                    intersection[currentTopicHash] = topic;
+                    intersection[currentTopicHash] = currentTopicHash;
                 }
             })
             base = intersection;
