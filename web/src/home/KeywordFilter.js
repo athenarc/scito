@@ -1,13 +1,15 @@
 import {Button, ButtonGroup} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import {removeFilter, switchFilter} from "./redux";
+import {connect} from "react-redux";
 
 const KeywordFilter = props => {
     const handleSwitch = () => {
-        props.onSwitch(props.filter);
+        props.switchFilter(props.filter);
     }
     const handleRemove = () => {
-        props.onRemove(props.filter);
+        props.removeFilter(props.filter);
     }
     const qualifiedColor = props.enabled ? 'info' : 'secondary';
     return <ButtonGroup size={'sm'}>
@@ -21,4 +23,9 @@ const KeywordFilter = props => {
     </ButtonGroup>
 }
 
-export default KeywordFilter;
+const mapDispatchToProps = {
+    switchFilter,
+    removeFilter
+}
+
+export default connect(null, mapDispatchToProps)(KeywordFilter);

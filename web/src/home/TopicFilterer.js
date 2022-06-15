@@ -3,21 +3,25 @@ import {AsyncTypeahead} from "react-bootstrap-typeahead";
 import {api} from "../config/axios";
 import {Col, Row} from "reactstrap";
 import KeywordFilter from "./KeywordFilter";
-import produce from "immer";
+import {addFilter, clearFilters} from "./redux";
+import {connect} from "react-redux";
 
-const TopicFilterer = () => {
+const TopicFilterer = props => {
     const ref = useRef(null);
     const controller = new AbortController()
 
     const [isLoading, setLoading] = useState(false);
     const [options, setOptions] = useState([]);
-    const [filters, setFilters] = useState({});
-
-    //
+    // const [filters, setFilters] = useState({});
     const handleSearch = query => {
         if (isLoading) controller.abort();
         else setLoading(true);
-        api.get(`search-terms?token=${query}`, {signal: controller.signal})
+        api.get(`search-terms`, {
+            params: {
+                token: query
+            },
+            signal: controller.signal
+        })
             .then(response => {
                 const matchedTerms = response.data;
                 setOptions(matchedTerms);
@@ -28,27 +32,27 @@ const TopicFilterer = () => {
             })
     }
 
-    const addFilter = selection => {
-        setFilters(produce(filters, draft => {
-            draft[selection] = true
-        }));
-    }
-    const removeFilter = selection => {
-        setFilters(produce(filters, draft => {
-            if (draft.hasOwnProperty(selection)) delete draft[selection];
-        }));
-    }
-    const switchFilter = selection => {
-        setFilters(produce(filters, draft => {
-            if (draft.hasOwnProperty(selection)) draft[selection] = !draft[selection];
-        }));
-    }
-
-    const clearFilters = () => setFilters({});
+    // const addFilter = selection => {
+    //     setFilters(produce(filters, draft => {
+    //         draft[selection] = true
+    //     }));
+    // }
+    // const removeFilter = selection => {
+    //     setFilters(produce(filters, draft => {
+    //         if (draft.hasOwnProperty(selection)) delete draft[selection];
+    //     }));
+    // }
+    // const switchFilter = selection => {
+    //     setFilters(produce(filters, draft => {
+    //         if (draft.hasOwnProperty(selection)) draft[selection] = !draft[selection];
+    //     }));
+    // }
+    //
+    // const clearFilters = () => setFilters({});
 
     const handleChange = selections => {
         if (selections.length > 0) {
-            addFilter(selections[0]);
+            props.addFilter(selections[0]);
             ref.current.clear();
         }
     }
@@ -90,19 +94,18 @@ const TopicFilterer = () => {
         </Row>
         <Row className={'my-2 justify-content-center'}>
             <Col xs={12}>
-                {Object.keys(filters).length > 0 &&
+                {Object.keys(props.filters).length > 0 &&
                     <div className={'ml-3 d-flex align-items-baseline'}>
-                        <span style={{flex: '0 0 content'}}>Filtering keywords (<a onClick={clearFilters}
-                                                                                   role={'button'}
-                                                                                   className={'text-danger'}>clear</a>):</span>
+                        <div style={{flex: '0 0 content'}}>
+                            <div>Topic keywords (<a onClick={props.clearFilters} role={'button'} className={'text-danger'}>clear</a>):</div>
+                        </div>
                         <div className={'d-flex flex-row flex-wrap'}>
-                            {Object.keys(filters).map(filter => {
+                            {Object.keys(props.filters).map(filter => {
                                 return <div key={`filter-${filter}`} className={'d-inline-block m-1'}>
                                     <KeywordFilter
-                                        onSwitch={switchFilter}
-                                        onRemove={removeFilter}
-                                        enabled={filters[filter]}
-                                        filter={filter}/>
+                                        enabled={props.filters[filter]}
+                                        filter={filter}
+                                    />
                                 </div>
                             })
                             }
@@ -114,4 +117,13 @@ const TopicFilterer = () => {
     </Fragment>
 }
 
-export default TopicFilterer;
+const mapStateToProps = storeState => ({
+    filters: storeState.topicFilterer.filters,
+    filteredTopics: storeState.topicFilterer.filteredTopics
+});
+
+const mapDispatchToProps = {
+    addFilter, clearFilters
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopicFilterer);
