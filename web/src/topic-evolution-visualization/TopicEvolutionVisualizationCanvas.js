@@ -55,15 +55,16 @@ class TopicEvolutionVisualizationCanvas extends React.Component {
             )}
             {this.props.nodes && Object.values(this.props.nodes).map(
                 node => <TopicNode
-                    x={node.x}
-                    y={node.y}
-                    width={node.width}
-                    height={node.height}
-                    impact={node.proportional_avg_pagerank_score}
-                    key={`node-${node.name}`}
-                    name={node.name}
-                    active={this.props.activeNodesRegistry.hasOwnProperty(node.name)}
-                />
+                        x={node.x}
+                        y={node.y}
+                        width={node.width}
+                        height={node.height}
+                        impact={node.proportional_avg_pagerank_score}
+                        key={`node-${node.name}`}
+                        name={node.name}
+                        filtered={this.props.filteredTopics.includes(node.name)}
+                        active={this.props.activeNodesRegistry.hasOwnProperty(node.name)}
+                    />
             )}
 
             {topicNodeTooltips}
@@ -75,7 +76,8 @@ const mapStateToProps = storeState => ({
     nodes: storeState.topicEvolutionVisualization.nodes,
     links: storeState.topicEvolutionVisualization.links,
     loading: storeState.topicEvolutionVisualization.loading,
-    activeNodesRegistry: storeState.topicEvolutionVisualization.activeNodesRegistry
+    activeNodesRegistry: storeState.topicEvolutionVisualization.activeNodesRegistry,
+    filteredTopics: storeState.topicFilterer.filteredTopics
 });
 
 const mapDispatchToProps = {

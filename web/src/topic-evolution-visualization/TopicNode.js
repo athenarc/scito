@@ -10,7 +10,7 @@ const TopicNode = props => {
     const impactColor = palette.getColor(colorNumber);
     const color = focused ? palette.getColor(Math.max(colorNumber-30,1)) : impactColor;
     return (
-        <g className={'topic-node'+(props.active?' active':'')}>
+        <g className={`topic-node ${props.filtered? 'filtered': ''} ${props.active? 'active': ''}`}>
             <rect x={props.x} y={props.y} width={props.width} height={Math.max(props.height)} fill={color}
                   onMouseEnter={() => {
                 setFocused(true);
